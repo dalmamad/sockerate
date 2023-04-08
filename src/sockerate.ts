@@ -1,59 +1,58 @@
 /* eslint-disable no-unused-vars */
-// import Reflect from './reflects';
-// import { Data, Options, Ctrls } from './interfaces';
-//
-// class DecoRoute {
-//   private static options: Options = {
-//     catchAsync: true,
-//   };
-//
-//   private static catchAsync(fns: any[]) {
-//     if (this.options.catchAsync)
-//       fns.forEach((fn, index) => {
-//         fns[index] = (req: any, res: any, next: any) => {
-//           Promise.resolve(fn(req, res, next)).catch((err) => {
-//             next(err);
-//           });
-//         };
-//       });
-//     return fns;
-//   }
-//
-//   private static handleOptions(options: Options): void {
-//     const optionKeys = Object.keys(options) as [keyof Options];
-//     optionKeys.forEach((option: keyof Options) => {
-//       this.options[option] = options[option];
-//     });
-//   }
-//
-//   static setControllers(
-//     app: any,
-//     { pathPrefix, controllers, options }: Ctrls
-//   ): void {
-//     if (options) DecoRoute.handleOptions(options);
-//
-//     controllers.forEach((controller) => {
-//       const target = controller.prototype;
-//       const data: Data = Reflect.getTargetData(target);
-//
-//       data.noName.handlers.forEach((handlerData) => {
-//         const allPath = pathPrefix
-//           ? pathPrefix + handlerData.controllerPath + handlerData.path
-//           : handlerData.controllerPath + handlerData.path;
-//
-//         const middlewares = Reflect.getMiddleWareData(
-//           target,
-//           handlerData.propertyKey
-//         );
-//
-//         const mwsAndHandler = middlewares
-//           ? [...middlewares, handlerData.handler]
-//           : [handlerData.handler];
-//
-//         app[handlerData.method](allPath, DecoRoute.catchAsync(mwsAndHandler));
-//       });
-//     });
-//   }
-// }
-//
-// export const { setControllers } = DecoRoute;
+import Reflect from './reflects';
+import { Data, Options, Input } from './interfaces';
+
+class Sockerate {
+  private static options: Options = {
+    prefix: '',
+    catchError: true,
+  };
+
+  private static catchError(fn: Function, errorHandler: Function): Function {
+    if (this.options.catchError)
+      return (payload: any, callback: Function) => {
+        try {
+          Promise.resolve(fn(payload, callback)).catch((err) => {
+            errorHandler(err, callback);
+          });
+        } catch (err) {
+          errorHandler(err, callback);
+        }
+      };
+    return fn;
+  }
+
+  private static handleOptions(options: Options): void {
+    const optionKeys = Object.keys(options) as [keyof Options];
+    optionKeys.forEach((option) => {
+      this.options[option] = options[option] as any;
+    });
+  }
+
+  static setListeners(
+    socket: any,
+    { listeners, errorHandler }: Input,
+    options: Options
+  ): void {
+    if (options) Sockerate.handleOptions(options);
+
+    listeners.forEach((listener) => {
+      const target = listener.prototype;
+      const data: Data = Reflect.getTargetData(target);
+
+      data.noName.listeners.forEach((listenerData) => {
+        const allName =
+          this.options.prefix +
+          (listenerData.parentEventName as string) +
+          listenerData.method;
+
+        socket[listenerData.method](
+          allName,
+          Sockerate.catchError(listenerData.listener, errorHandler)
+        );
+      });
+    });
+  }
+}
+
+export const { setListeners } = Sockerate;

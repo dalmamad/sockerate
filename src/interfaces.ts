@@ -1,39 +1,34 @@
-// export type Methods =
-//   | 'get'
-//   | 'post'
-//   | 'put'
-//   | 'delete'
-//   | 'patch'
-//   | 'head'
-//   | 'all';
-//
-// export interface HandlerData {
-//   path: string;
-//   controllerPath?: string;
-//   method: Methods;
-//   propertyKey: string;
-//   handler: any;
-// }
-//
-// export interface Data {
-//   [key: string]:
-//     | {
-//         middlewares: Function[];
-//       }
-//     | {
-//         handlers: HandlerData[];
-//       };
-//   noName: {
-//     handlers: HandlerData[];
-//   };
-// }
-//
-// export interface Options {
-//   catchAsync?: boolean;
-// }
-//
-// export interface Ctrls {
-//   controllers: any[];
-//   pathPrefix?: string;
-//   options?: Options;
-// }
+export type Methods =
+  | 'on'
+  | 'once'
+  | 'onAny'
+  | 'prependAny'
+  | 'onAnyOutgoing'
+  | 'prependAnyOutgoing';
+
+export interface ListenerData {
+  eventName: string;
+  method: Methods;
+  parentEventName?: string;
+  propertyKey: string;
+  listener: any;
+}
+
+export interface Data {
+  [key: string]: {
+    listeners: ListenerData[];
+  };
+  noName: {
+    listeners: ListenerData[];
+  };
+}
+
+export interface Options {
+  catchError?: boolean;
+  prefix?: string;
+}
+
+export interface Input {
+  listeners: any[];
+  errorHandler: Function;
+}

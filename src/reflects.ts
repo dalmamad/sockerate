@@ -1,8 +1,7 @@
-import { HandlerData } from './interfaces';
+import { ListenerData } from './interfaces';
 
 const namelessProperty = 'noName';
-const handlersKey = 'handlers';
-const middlewaresKey = 'middlewares';
+const listenersKey = 'listeners';
 
 export default class Reflect {
   private static allData: Map<any, any> = new Map();
@@ -11,33 +10,18 @@ export default class Reflect {
     return this.allData.get(target);
   }
 
-  public static addControllerData(controllerPath: string, target: any) {
-    const handlersData: HandlerData[] = this.getData(handlersKey, target);
-    handlersData.forEach((handlerData: HandlerData) => {
-      handlerData.controllerPath = controllerPath;
+  public static addParentiData(parentEventName: string, target: any) {
+    const handlersData: ListenerData[] = this.getData(listenersKey, target);
+    handlersData.forEach((handlerData: ListenerData) => {
+      handlerData.parentEventName = parentEventName;
     });
   }
 
-  public static addHandlerData(newHandlerData: any, target: any) {
-    if (!this.getData(handlersKey, target))
-      this.setData(handlersKey, [], target);
-    const handlersData: HandlerData[] = this.getData(handlersKey, target);
-    handlersData.push(newHandlerData);
-  }
-
-  public static addMiddleWareData(
-    newMiddlewareData: Function,
-    target: any,
-    propertyKey: string
-  ) {
-    if (!this.getData(middlewaresKey, target, propertyKey))
-      this.setData(middlewaresKey, [], target, propertyKey);
-    const middlewaresData = this.getData(middlewaresKey, target, propertyKey);
-    middlewaresData.unshift(newMiddlewareData);
-  }
-
-  public static getMiddleWareData(target: any, propertyKey: string) {
-    return this.getData(middlewaresKey, target, propertyKey);
+  public static addListenerData(newListenerData: any, target: any) {
+    if (!this.getData(listenersKey, target))
+      this.setData(listenersKey, [], target);
+    const listenersData: ListenerData[] = this.getData(listenersKey, target);
+    listenersData.push(newListenerData);
   }
 
   public static setData(
