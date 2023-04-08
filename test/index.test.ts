@@ -1,109 +1,64 @@
-// import request from 'supertest';
-// import express, { Express } from 'express';
-// import {
-//   Mw,
-//   Get,
-//   Post,
-//   Patch,
-//   Put,
-//   Delete,
-//   All,
-//   Head,
-//   Controller,
-//   setControllers,
-// } from '../src/index';
+// import { io } from 'socket.io-client';
+// import { Server } from 'socket.io';
+// import { setListeners, On, Listener } from '../src/index';
 //
-// let app: Express;
+// const socketClient = io('ws://localhost:3000');
 //
 // beforeAll(() => {
-//   app = express();
-//
-//   async function mw(req: any, res: any, next: any) {
-//     req.mw = true;
-//     next();
-//   }
-//
-//   @Controller('/data')
-//   class Cont {
-//     @Get('/get')
-//     @Mw(mw)
-//     async get(req: any, res: any) {
-//       if (!req.mw) throw new Error('no middleware');
-//       res.json({ status: 200 });
-//     }
-//
-//     @Post('/post')
-//     async post(req: any, res: any) {
-//       res.json({ status: 200 });
-//     }
-//
-//     @Put('/put')
-//     @Mw(mw)
-//     async put(req: any, res: any) {
-//       if (!req.mw) throw new Error('no middleware');
-//       res.json({ status: 200 });
-//     }
-//
-//     @Delete('/delete')
-//     @Mw(mw)
-//     async delete(req: any, res: any) {
-//       if (!req.mw) throw new Error('no middleware');
-//       res.json({ status: 200 });
-//     }
-//
-//     @Patch('/patch')
-//     @Mw(mw)
-//     async patch(req: any, res: any) {
-//       if (!req.mw) throw new Error('no middleware');
-//       res.json({ status: 200 });
-//     }
-//
-//     @All('/all')
-//     @Mw(mw)
-//     async all(req: any, res: any) {
-//       if (!req.mw) throw new Error('no middleware');
-//       res.json({ status: 200 });
-//     }
-//
-//     @Head('/head')
-//     @Mw(mw)
-//     async head(req: any, res: any) {
-//       if (!req.mw) throw new Error('no middleware');
-//       res.set('status', '200');
-//       res.send('done');
+//   @Listener('/msg')
+//   class Class {
+//     @On('/new')
+//     async method(socket: any, data: any, callback: any) {
+//       console.log(socket);
+//       console.log(data);
+//       // callback({ status: 'ok' });
 //     }
 //   }
 //
-//   setControllers(app, { controllers: [Cont], pathPrefix: '/api' });
+//   const ioServer = new Server(3000);
+//   ioServer.on('connection', (socket) => {
+//     socket.on('hii', (data) => {
+//       console.log(data);
+//     });
+//   });
 // });
 //
 // describe('User controllers', () => {
-//   test('Get data', async () => {
-//     const res = await request(app).get('/api/data/get');
-//     expect(res.body.status).toEqual(200);
+//   test('Get data', () => {
+//     socketClient.emit('hii', { hi: 'world' });
+//     expect(1).toEqual(1);
+//     // const res = await request(app).get('/api/data/get');
+//     // expect(res.body.status).toEqual(200);
 //   });
-//   test('Post data', async () => {
-//     const res = await request(app).post('/api/data/post');
-//     expect(res.body.status).toEqual(200);
+// });
+//
+//
+//
+// import { Server } from 'socket.io';
+// import { setListeners, On, Listener } from '../src/index';
+//
+// @Listener('/msg')
+// class Class {
+//   @On('/new')
+//   method(socket: any, data: any, callback: any) {
+//     throw 'xxxxxxxxx';
+//     console.log('44444');
+//     // console.log(socket);
+//     console.log(data);
+//     callback({ status: 'ok' });
+//   }
+// }
+//
+// const io = new Server(3000);
+// function errorHandler(err: any, res: any) {
+//   console.log('ssssssss');
+//   console.log(err);
+//   res({ err });
+// }
+// io.on('connection', (socket) => {
+//   socket.on('hii', (data) => {
+//     console.log(data);
 //   });
-//   test('Put data', async () => {
-//     const res = await request(app).put('/api/data/put');
-//     expect(res.body.status).toEqual(200);
-//   });
-//   test('Delete data', async () => {
-//     const res = await request(app).delete('/api/data/delete');
-//     expect(res.body.status).toEqual(200);
-//   });
-//   test('Patch data', async () => {
-//     const res = await request(app).patch('/api/data/patch');
-//     expect(res.body.status).toEqual(200);
-//   });
-//   test('All data', async () => {
-//     const res = await request(app).get('/api/data/all');
-//     expect(res.body.status).toEqual(200);
-//   });
-//   test('Head data', async () => {
-//     const res = await request(app).head('/api/data/head');
-//     expect(res.headers.status).toEqual('200');
-//   });
+//
+//   setListeners(socket, { listeners: [Class] });
 // });

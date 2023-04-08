@@ -31,6 +31,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'max-classes-per-file': 'off',
     'no-param-reassign': 'off',
+    'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'import/prefer-default-export': 'off',

@@ -8,18 +8,26 @@ class Sockerate {
     catchError: true,
   };
 
-  private static catchError(fn: Function, errorHandler: Function): Function {
+  private static errorHandler(err: any) {
+    console.log(err);
+  }
+
+  private static catchError(
+    socket: any,
+    fn: Function,
+    errorHandler: Function
+  ): Function {
     if (this.options.catchError)
-      return (payload: any, callback: Function) => {
+      return (data: any, callback: undefined) => {
         try {
-          Promise.resolve(fn(payload, callback)).catch((err) => {
+          Promise.resolve(fn(socket, data, callback)).catch((err) => {
             errorHandler(err, callback);
           });
         } catch (err) {
           errorHandler(err, callback);
         }
       };
-    return fn;
+    return (data: any, callback: Function) => fn(socket, data, callback);
   }
 
   private static handleOptions(options: Options): void {
@@ -32,9 +40,11 @@ class Sockerate {
   static setListeners(
     socket: any,
     { listeners, errorHandler }: Input,
-    options: Options
+    options?: Options
   ): void {
     if (options) Sockerate.handleOptions(options);
+
+    if (errorHandler) Sockerate.errorHandler = errorHandler;
 
     listeners.forEach((listener) => {
       const target = listener.prototype;
@@ -42,13 +52,17 @@ class Sockerate {
 
       data.noName.listeners.forEach((listenerData) => {
         const allName =
-          this.options.prefix +
+          Sockerate.options.prefix +
           (listenerData.parentEventName as string) +
-          listenerData.method;
+          listenerData.eventName;
 
         socket[listenerData.method](
           allName,
-          Sockerate.catchError(listenerData.listener, errorHandler)
+          Sockerate.catchError(
+            socket,
+            listenerData.listener,
+            Sockerate.errorHandler
+          )
         );
       });
     });

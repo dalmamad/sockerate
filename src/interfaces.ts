@@ -30,5 +30,5 @@ export interface Options {
 
 export interface Input {
   listeners: any[];
-  errorHandler: Function;
+  errorHandler?: (err: any, res?: any) => void;
 }
