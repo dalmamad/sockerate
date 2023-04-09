@@ -19,7 +19,7 @@ class Sockerate {
     errorHandler: Function
   ): Function {
     if (this.options.catchError)
-      return (data: any, callback: undefined) => {
+      return (data: any, callback: any) => {
         try {
           Promise.resolve(fn(socket, data, callback)).catch((err) => {
             errorHandler(err, callback);
