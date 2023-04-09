@@ -3,6 +3,7 @@ import Reflect from './reflects';
 import { Data, Options, Input } from './interfaces';
 
 class Sockerate {
+  public static listeners: any = {};
   private static options: Options = {
     prefix: '',
     catchError: true,
@@ -51,19 +52,22 @@ class Sockerate {
       const data: Data = Reflect.getTargetData(target);
 
       data.noName.listeners.forEach((listenerData) => {
-        const allName =
-          Sockerate.options.prefix +
-          (listenerData.parentEventName as string) +
-          listenerData.eventName;
+        const parentEventName = listenerData.parentEventName
+          ? listenerData.parentEventName
+          : '';
 
-        socket[listenerData.method](
-          allName,
-          Sockerate.catchError(
-            socket,
-            listenerData.listener,
-            Sockerate.errorHandler
-          )
+        const listenerFn = Sockerate.catchError(
+          socket,
+          listenerData.listener,
+          Sockerate.errorHandler
         );
+
+        Reflect.setListener(listenerFn, target, listenerData.propertyKey);
+
+        const allName =
+          Sockerate.options.prefix + parentEventName + listenerData.eventName;
+
+        socket[listenerData.method](allName, listenerFn);
       });
     });
   }

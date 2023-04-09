@@ -31,50 +31,46 @@ export function Once(eventName = '') {
   };
 }
 
-export function OnAny(eventName = '') {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const data: ListenerData = {
-      method: 'onAny',
-      listener: descriptor.value,
-      propertyKey,
-      eventName,
-    };
-    Reflect.addListenerData(data, target);
-  };
-}
-
-export function PrependAny(eventName = '') {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const data: ListenerData = {
-      method: 'prependAny',
-      listener: descriptor.value,
-      propertyKey,
-      eventName,
-    };
-    Reflect.addListenerData(data, target);
-  };
-}
-
-export function OnAnyOutgoing(eventName = '') {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const data: ListenerData = {
-      method: 'onAnyOutgoing',
-      listener: descriptor.value,
-      propertyKey,
-      eventName,
-    };
-    Reflect.addListenerData(data, target);
-  };
-}
-
-export function PrependAnyOutgoing(eventName = '') {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const data: ListenerData = {
-      method: 'prependAnyOutgoing',
-      listener: descriptor.value,
-      propertyKey,
-      eventName,
-    };
-    Reflect.addListenerData(data, target);
-  };
-}
+// export function OnAny() {
+//   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+//     const data: ListenerData = {
+//       method: 'onAny',
+//       listener: descriptor.value,
+//       propertyKey,
+//     };
+//     Reflect.addListenerData(data, target);
+//   };
+// }
+//
+// export function PrependAny() {
+//   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+//     const data: ListenerData = {
+//       method: 'prependAny',
+//       listener: descriptor.value,
+//       propertyKey,
+//     };
+//     Reflect.addListenerData(data, target);
+//   };
+// }
+//
+// export function OnAnyOutgoing() {
+//   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+//     const data: ListenerData = {
+//       method: 'onAnyOutgoing',
+//       listener: descriptor.value,
+//       propertyKey,
+//     };
+//     Reflect.addListenerData(data, target);
+//   };
+// }
+//
+// export function PrependAnyOutgoing() {
+//   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+//     const data: ListenerData = {
+//       method: 'prependAnyOutgoing',
+//       listener: descriptor.value,
+//       propertyKey,
+//     };
+//     Reflect.addListenerData(data, target);
+//   };
+// }

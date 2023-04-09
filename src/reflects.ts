@@ -2,6 +2,7 @@ import { ListenerData } from './interfaces';
 
 const namelessProperty = 'noName';
 const listenersKey = 'listeners';
+const allListeners = 'allListeners';
 
 export default class Reflect {
   private static allData: Map<any, any> = new Map();
@@ -22,6 +23,18 @@ export default class Reflect {
       this.setData(listenersKey, [], target);
     const listenersData: ListenerData[] = this.getData(listenersKey, target);
     listenersData.push(newListenerData);
+  }
+
+  public static setListener(
+    listener: Function,
+    target: Function,
+    propertyKey: string
+  ) {
+    Reflect.setData(allListeners, listener, target, propertyKey);
+  }
+
+  public static getListener(target: Function, propertyKey: string) {
+    return Reflect.getData(allListeners, target.prototype, propertyKey);
   }
 
   public static setData(
@@ -45,3 +58,5 @@ export default class Reflect {
     return targetData?.[propertyKey]?.[key];
   }
 }
+
+export const { getListener } = Reflect;

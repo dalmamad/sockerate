@@ -1,10 +1,8 @@
-export type Methods =
-  | 'on'
-  | 'once'
-  | 'onAny'
-  | 'prependAny'
-  | 'onAnyOutgoing'
-  | 'prependAnyOutgoing';
+export type Methods = 'on' | 'once';
+// | 'onAny'
+// | 'prependAny'
+// | 'onAnyOutgoing'
+// | 'prependAnyOutgoing';
 
 export interface ListenerData {
   eventName: string;
