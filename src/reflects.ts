@@ -12,9 +12,9 @@ export default class Reflect {
   }
 
   public static addParentiData(parentEventName: string, target: any) {
-    const handlersData: ListenerData[] = this.getData(listenersKey, target);
-    handlersData.forEach((handlerData: ListenerData) => {
-      handlerData.parentEventName = parentEventName;
+    const listenersData: ListenerData[] = this.getData(listenersKey, target);
+    listenersData.forEach((listenerData: ListenerData) => {
+      listenerData.parentEventName = parentEventName;
     });
   }
 
